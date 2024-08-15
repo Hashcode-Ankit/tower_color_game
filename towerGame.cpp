@@ -6,14 +6,8 @@ using namespace std;
 
 void findSolution(int numOfTowers,int sizeOfTower, int numOfEmptyTowers, int numOfColors,vector< std::stack<char> >& towerGrid, vector<string>& solution) {
     // base case check if it is recquired solution 
-   
-    stack<char> towerGrid1THPosition = towerGrid[0];
-    stack<char> towerGrid2THPosition = towerGrid[1];
-    stack<char> towerGrid3THPosition = towerGrid[2];
-    stack<char> towerGrid4THPosition = towerGrid[3];
     bool foundSolution = true;
     int empty = 0;
-
     for(int i=0;i<numOfTowers;i++) {
        stack<char> st =  towerGrid[i];
        map<char,int> mp;
@@ -32,13 +26,14 @@ void findSolution(int numOfTowers,int sizeOfTower, int numOfEmptyTowers, int num
     
     if (foundSolution and empty == numOfEmptyTowers) {
         // print the solution here
-        cout<<endl<<"printing solution here: "<<endl;
-        for(int i=solution.size()-1;i>=0;--i) {
+        cout<<endl<<"------- Horray!! solution ------"<<endl;
+        for(int i=0;i<solution.size();i++) {
             cout<<solution[i]<<endl;
         }
-        cout<<endl<<"solution end here"<<endl;
+        cout<<endl<<"--------Stop You Solved IT!!----"<<endl;
         return;
     }
+    // check if it is going in hell 
     if(solution.size()>4) {
         if (solution[solution.size()-1] == solution[solution.size()-3] and solution[solution.size()-2] == solution[solution.size()-4])
         {
@@ -47,7 +42,6 @@ void findSolution(int numOfTowers,int sizeOfTower, int numOfEmptyTowers, int num
     }
     // move one by one and check if solution it is or backtrack the solution
     for(int i=0;i<numOfTowers;i++) {
-        stack<char> towerGridITHPosition = towerGrid[i];
         // if ith tower is empty move on 
         if (towerGrid[i].empty()) continue;
         // check if top of each tower can be moved to next any of them 
@@ -58,23 +52,23 @@ void findSolution(int numOfTowers,int sizeOfTower, int numOfEmptyTowers, int num
            // check if it is an empty tower
            if(towerGrid[j].empty()) {
                 // just put the element 
+                // below code is repeating so we can make it modular
                 towerGrid[j].push(topOnIthTower);
                 towerGrid[i].pop();
-                solution.push_back("move "+ to_string(i) + "element to "+ to_string(j));
+                solution.push_back("move tower["+ to_string(i+1) + "] element to tower["+ to_string(j+1)+"]");
                 findSolution(numOfTowers, sizeOfTower,  numOfEmptyTowers,  numOfColors, towerGrid,solution);
                 solution.pop_back();
                 towerGrid[j].pop();
                 towerGrid[i].push(topOnIthTower);
             }else {
-                char topOnJthTower = towerGrid[j].top();
                 int sizeT2 = towerGrid[j].size();
                 // if both are equal 
-                if (topOnIthTower == topOnJthTower) {
+                if (topOnIthTower == towerGrid[j].top()) {
                     // if size of tower is less in jth tower move it 
                     if(sizeT2 < sizeOfTower){
                         towerGrid[j].push(topOnIthTower);
                         towerGrid[i].pop();
-                        solution.push_back("move "+ to_string(i) + "element to "+ to_string(j));
+                        solution.push_back("move tower["+ to_string(i+1) + "] element to tower["+ to_string(j+1)+"]");
                         findSolution(numOfTowers, sizeOfTower,  numOfEmptyTowers,  numOfColors, towerGrid, solution);
                         solution.pop_back();
                         towerGrid[j].pop();
@@ -91,28 +85,6 @@ int main() {
  // take input 
  int numTower=4 , emptyTower = 1 ,sizeOfTower= 3, colours = 3;
  std::vector< stack<char> > grid;
- vector<char> t1 = {'A', 'B', 'A'};
- vector<char> t2 = {'A', 'C', 'B'};
- vector<char> t3 = {'B', 'C', 'C'};
- stack<char> st1, st2, st3,st4;
- map<char,int> mp1,mp2,mp3,mp4;
-//  for(auto x: t1){
-//     st1.push(x);
-//     mp1[x]++;
-//  }
-//  for(auto x: t2){
-//     st2.push(x);
-//     mp2[x]++;
-//  }
-//  for(auto x: t3){
-//     st3.push(x);
-//     mp3[x]++;
-//  }
-//  grid.push_back(st1);
-//  grid.push_back(st2);
-//  grid.push_back(st3);
-//  grid.push_back(st4);
-
  cout<<"Enter Number of Towers: "<<endl;
  cin>>numTower;
  cout<<"Enter number of Empty towers: "<<endl;
@@ -133,6 +105,7 @@ int main() {
     grid.push_back(singleTower);
  }
  vector<string> solution;
+ cout<<"............Doing Science.........."<<endl;
  // input is ready let us add some tadka
  findSolution(numTower, sizeOfTower, emptyTower,colours, grid, solution);
  return 0;
