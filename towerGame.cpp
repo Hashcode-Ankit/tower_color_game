@@ -13,6 +13,8 @@ int checkBackCount(vector<char> v, char toCheck) {
     return count;
 }
 int maxLenOfSolution = 1e4;
+auto start = chrono::high_resolution_clock::now();
+
 void findSolution(int numOfTowers,int sizeOfTower, int numOfEmptyTowers,vector< vector<char> >& towerGrid, vector<pair<int,int>>& solution) {
     // base case check if it is recquired solution 
     bool foundSolution = true;
@@ -32,22 +34,28 @@ void findSolution(int numOfTowers,int sizeOfTower, int numOfEmptyTowers,vector< 
           empty++;
        }
     }
-    if (maxLenOfSolution!= 1e4) {
-        return;
-    }
     if (foundSolution and empty == numOfEmptyTowers) {
         // print the solution here
-        if (maxLenOfSolution> solution.size()) { // only print better solution every time
+        if (maxLenOfSolution > solution.size()) { // only print better solution every time
+            int count = 0;
             cout<<endl<<"-----------😎 Horray!! solution ------"<<endl;
             for(int i=0;i<solution.size();i++) {
+                if (i!=0 && solution[i]== solution[i-1]) continue;
+                count++;
                 cout<<"move elements from "<<solution[i].first+1<<" to "<<solution[i].second+1<<endl;
             }
-            cout<<"--------Congratulations 🥳 You Solved IT!!----"<<endl;
+            auto end = std::chrono::high_resolution_clock::now();
+            chrono::duration<double> duration = end - start;
+            cout<<"------ Total Size & duration: "<<count<<" : "<<duration.count()<<"s -------------"<<endl;
+            cout<<"--------Congratulations 🥳 You Solved IT !!----"<<endl;
+            
+
+
             maxLenOfSolution = solution.size();
         }
         return;
     }
-    if(solution.size() > pow(10, 4)) return;
+    if(solution.size() > maxLenOfSolution) return;
     // // check if it is in hell 
     if(solution.size()>2) {
         pair<int,int> lastOne = solution[solution.size()-1];
@@ -112,6 +120,8 @@ int main() {
  vector<pair<int,int>> solution;
  cout<<"............Doing Science.........."<<endl;
  // input is ready let us add some tadka
+ start = chrono::high_resolution_clock::now();
  findSolution(numTower, sizeOfTower, emptyTower, grid, solution);
+ 
  return 0;
 }
